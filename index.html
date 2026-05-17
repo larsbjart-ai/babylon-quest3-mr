@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>Babylon Quest 3 MR</title>
-  <script src="https://cdn.babylonjs.com/babylon.js"></script>
-  <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
-  <style>
-    html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
-    canvas { width: 100%; height: 100%; }
-  </style>
+    <meta charset="UTF-8">
+    <title>Babylon Quest 3 MR</title>
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+    <style>
+        html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+        canvas { width: 100%; height: 100%; }
+    </style>
 </head>
 <body>
 <canvas id="renderCanvas"></canvas>
@@ -18,32 +18,36 @@ const canvas = document.getElementById("renderCanvas");
 const engine = new BABYLON.Engine(canvas, true);
 
 async function createScene() {
-  const scene = new BABYLON.Scene(engine);
+    const scene = new BABYLON.Scene(engine);
 
-  const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0,1,0), scene);
+    // Light
+    new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
 
- BABYLON.SceneLoader.Append("", "roof.glb", scene, function (scene) {
-    const root = scene.meshes[scene.meshes.length - 1];
-    root.position = new BABYLON.Vector3(0, 1, 0);
-    root.scaling = new BABYLON.Vector3(1, 1, 1);
-});
+    // Load your model
+    BABYLON.SceneLoader.Append("", "roof.glb", scene, function () {
+        const root = scene.meshes[scene.meshes.length - 1];
+        root.position = new BABYLON.Vector3(0, 1, 0);
+        root.scaling = new BABYLON.Vector3(1, 1, 1);
+    });
 
+    // WebXR AR mode
+    const xr = await scene.createDefaultXRExperienceAsync({
+        uiOptions: { sessionMode: "immersive-ar" },
+        optionalFeatures: true
+    });
 
-  const xr = await scene.createDefaultXRExperienceAsync({
-    uiOptions: { sessionMode: "immersive-ar" },
-    optionalFeatures: true
-  });
+    xr.baseExperience.featuresManager.enableFeature(
+        BABYLON.WebXRFeatureName.PASSTHROUGH
+    );
 
-  xr.baseExperience.featuresManager.enableFeature(
-    BABYLON.WebXRFeatureName.PASSTHROUGH
-  );
-
-  return scene;
+    return scene;
 }
 
 createScene().then(scene => {
-  engine.runRenderLoop(() => scene.render());
+    engine.runRenderLoop(() => scene.render());
 });
 </script>
+
 </body>
 </html>
+
