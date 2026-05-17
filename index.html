@@ -58,3 +58,42 @@ createScene().then(scene => {
 
 </body>
 </html>
+    
+
+<body>
+<canvas id="renderCanvas"></canvas>
+
+<script>
+const canvas = document.getElementById("renderCanvas");
+const engine = new BABYLON.Engine(canvas, true);
+
+async function createScene() {
+    const scene = new BABYLON.Scene(engine);
+
+    new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+
+    BABYLON.SceneLoader.Append("", "roof.glb", scene, function () {
+        const root = scene.meshes[scene.meshes.length - 1];
+        root.position = new BABYLON.Vector3(0, 1, 0);
+        root.scaling = new BABYLON.Vector3(1, 1, 1);
+    });
+
+    const xr = await scene.createDefaultXRExperienceAsync({
+        uiOptions: { sessionMode: "immersive-ar" },
+        optionalFeatures: true
+    });
+
+    xr.baseExperience.featuresManager.enableFeature(
+        BABYLON.WebXRFeatureName.PASSTHROUGH
+    );
+
+    return scene;
+}
+
+createScene().then(scene => {
+    engine.runRenderLoop(() => scene.render());
+});
+</script>
+
+</body>
+</html>
