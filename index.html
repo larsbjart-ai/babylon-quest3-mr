@@ -33,7 +33,12 @@ async function createScene() {
     const scene = new BABYLON.Scene(engine);
 
     // Basic light
-    new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
+    new BABYLON.HemisphericLight("light", BABYLON.SceneLoader.Append("", "roof.glb", scene, function () {
+    const root = scene.meshes[scene.meshes.length - 1];
+    root.position = new BABYLON.Vector3(0, 1, 0);
+    root.scaling = new BABYLON.Vector3(1, 1, 1);
+});
+
 
     // Load your model
     BABYLON.SceneLoader.Append("", "roof.glb", scene, function () {
