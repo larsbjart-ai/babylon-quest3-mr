@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>Babylon Quest 3 MR</title>
 
-    <!-- Babylon.js core + loaders -->
     <script src="https://cdn.babylonjs.com/babylon.js"></script>
     <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
 
@@ -32,23 +31,19 @@ const engine = new BABYLON.Engine(canvas, true);
 async function createScene() {
     const scene = new BABYLON.Scene(engine);
 
-    // Basic light
     new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
 
-    // Load your model
     BABYLON.SceneLoader.Append("", "roof.glb", scene, function () {
         const root = scene.meshes[scene.meshes.length - 1];
         root.position = new BABYLON.Vector3(0, 1, 0);
         root.scaling = new BABYLON.Vector3(1, 1, 1);
     });
 
-    // Enable WebXR AR mode
     const xr = await scene.createDefaultXRExperienceAsync({
         uiOptions: { sessionMode: "immersive-ar" },
         optionalFeatures: true
     });
 
-    // Enable passthrough
     xr.baseExperience.featuresManager.enableFeature(
         BABYLON.WebXRFeatureName.PASSTHROUGH
     );
@@ -56,7 +51,6 @@ async function createScene() {
     return scene;
 }
 
-// Start engine + render loop
 createScene().then(scene => {
     engine.runRenderLoop(() => scene.render());
 });
