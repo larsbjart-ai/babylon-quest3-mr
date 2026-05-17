@@ -3,13 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <title>Babylon Quest 3 MR</title>
+
+    <!-- Babylon.js core + loaders -->
     <script src="https://cdn.babylonjs.com/babylon.js"></script>
     <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+
     <style>
-        html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
-        canvas { width: 100%; height: 100%; }
+        html, body {
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        canvas {
+            width: 100%;
+            height: 100%;
+        }
     </style>
 </head>
+
 <body>
 <canvas id="renderCanvas"></canvas>
 
@@ -20,7 +32,7 @@ const engine = new BABYLON.Engine(canvas, true);
 async function createScene() {
     const scene = new BABYLON.Scene(engine);
 
-    // Light
+    // Basic light
     new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
 
     // Load your model
@@ -30,26 +42,17 @@ async function createScene() {
         root.scaling = new BABYLON.Vector3(1, 1, 1);
     });
 
-    // WebXR AR mode
+    // Enable WebXR AR mode
     const xr = await scene.createDefaultXRExperienceAsync({
         uiOptions: { sessionMode: "immersive-ar" },
         optionalFeatures: true
     });
 
-    xr.baseExperience.featuresManager.enableFeature(
-        BABYLON.WebXRFeatureName.PASSTHROUGH
-    );
+    // Enable
 
-    return scene;
-}
 
-createScene().then(scene => {
-    engine.runRenderLoop(() => scene.render());
-});
-</script>
 
-</body>
-</html>
+
 
 
 
