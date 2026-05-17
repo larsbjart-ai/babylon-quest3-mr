@@ -22,8 +22,12 @@ async function createScene() {
 
   const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0,1,0), scene);
 
-  const sphere = BABYLON.MeshBuilder.CreateSphere("sphere", { diameter: 0.3 }, scene);
-  sphere.position.y = 1;
+ BABYLON.SceneLoader.Append("", "roof.glb", scene, function (scene) {
+    const root = scene.meshes[scene.meshes.length - 1];
+    root.position = new BABYLON.Vector3(0, 1, 0);
+    root.scaling = new BABYLON.Vector3(1, 1, 1);
+});
+
 
   const xr = await scene.createDefaultXRExperienceAsync({
     uiOptions: { sessionMode: "immersive-ar" },
